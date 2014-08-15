@@ -1,0 +1,1 @@
+Pour SDL prendre i686-w64-mingw32
