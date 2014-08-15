@@ -13,7 +13,6 @@
 #include <iostream>
 
 #include "SDL2_gfx/SDL2_framerate.h"
-//#include "SDL2/SDL_ttf.h"
 
 /// === NAMESPACE	================================================================================
 using namespace std;

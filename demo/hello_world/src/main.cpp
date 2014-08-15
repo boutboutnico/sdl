@@ -6,6 +6,8 @@
 #include <texture.h>
 #include <renderer.h>
 #include <surface.h>
+#include <font.h>
+#include <text.h>
 
 #include <stdio.h>
 #include <iostream>
@@ -26,7 +28,7 @@ int main(int argc, char** argv)
 
 	try
 	{
-		SDL sdl(EInit::VIDEO | EInit::TIMER);
+		SDL sdl(EInit::VIDEO | EInit::TIMER, EInit_Lib::SDL_TTF);
 
 		/// Création de la fenêtre
 		Window window("Ma première application SDL2", Window::UNDEFINED, Window::UNDEFINED, 640,
@@ -38,6 +40,11 @@ int main(int argc, char** argv)
 		FPSmanager manager;
 		SDL_initFramerate(&manager);
 		SDL_setFramerate(&manager, 60);
+
+		/// Init font
+		SDL_Color black =
+		{ 0, 0, 0 };
+		Text text(renderer, Font("res/font/arial.ttf", 12), "Test sdl wrapper", black);
 
 		while (b_done == false)
 		{
@@ -73,6 +80,10 @@ int main(int argc, char** argv)
 					texture.getWidth(), texture.getHeight() };
 
 			texture.copy(NULL, &dest);
+
+			dest =
+			{	50,50,100,100};
+			text.copy(NULL, &dest);
 
 			renderer.present();
 
