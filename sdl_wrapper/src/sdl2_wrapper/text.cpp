@@ -1,38 +1,44 @@
-/*
- * surface.cpp
- *
- *  Created on: 12 juin 2014
- *      Author: Nico_user
- */
+///
+/// \file	text.cpp
+///	\brief	
+///	\date	15 août 2014
+/// \author	Nico_user
+///
 
-#include <surface.h>
+#include "text.h"
 using namespace sdl;
 
 /// === INCLUDES	================================================================================
 
 /// === NAMESPACES	================================================================================
-using namespace std;
 
 /// === PUBLIC DEFINITIONS	========================================================================
-Surface::Surface(const string& filename) throw (SDL_Exception)
+Text::Text(	Renderer& renderer,
+			const Font& font,
+			const std::string& text,
+			const SDL_Color& color) throw (SDL_Exception) :
+		font_(font), text_(text), color_(color)
 {
-	surface_ = SDL_LoadBMP(filename.c_str());
+	Surface surface(TTF_RenderText_Solid(font_.get(), text.c_str(), color));
 
-	if (surface_ == nullptr) throw SDL_Exception();
+	ptexture_ = new Texture(renderer, surface);
 }
 
 /// ------------------------------------------------------------------------------------------------
-Surface::Surface(SDL_Surface* surface) throw (SDL_Exception)
+Text::~Text()
 {
-	if (surface_ == nullptr) throw SDL_Exception();
-
-	surface_ = surface;
+	delete ptexture_;
 }
 
 /// ------------------------------------------------------------------------------------------------
-Surface::~Surface()
+int Text::copy(const SDL_Rect* src, const SDL_Rect* dst)
 {
-	if (surface_ != nullptr) SDL_FreeSurface(surface_);
+	SDL_Rect rect = *dst;
+
+	if (dst->w > ptexture_->getWidth()) rect.w = ptexture_->getWidth();
+	if (dst->h > ptexture_->getHeight()) rect.h = ptexture_->getHeight();
+
+	return ptexture_->copy(src, &rect);
 }
 
 /// === PRIVATE DEFINITIONS	========================================================================

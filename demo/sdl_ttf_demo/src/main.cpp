@@ -6,12 +6,14 @@
 #include <texture.h>
 #include <renderer.h>
 #include <surface.h>
+#include <font.h>
+#include <text.h>
 
 #include <stdio.h>
 #include <iostream>
 
 #include "SDL2_gfx/SDL2_framerate.h"
-#include "SDL2/SDL_ttf.h"
+//#include "SDL2/SDL_ttf.h"
 
 /// === NAMESPACE	================================================================================
 using namespace std;
@@ -27,12 +29,7 @@ int main(int argc, char** argv)
 
 	try
 	{
-		SDL sdl(EInit::VIDEO | EInit::TIMER);
-
-		if (TTF_Init() == -1)
-		{
-			cerr << "TTF_Init : " << TTF_GetError() << endl;
-		}
+		SDL sdl(EInit::VIDEO | EInit::TIMER, EInit_Lib::SDL_TTF);
 
 		/// Création de la fenêtre
 		Window window("Ma première application SDL2", Window::UNDEFINED, Window::UNDEFINED, 640,
@@ -46,12 +43,9 @@ int main(int argc, char** argv)
 		SDL_setFramerate(&manager, 60);
 
 		/// Init font
-		TTF_Font* font = TTF_OpenFont("res/font/arial.ttf", 12);
-
-		if (font == nullptr)
-		{
-			cerr << "TTF_OpenFont : " << TTF_GetError() << endl;
-		}
+		SDL_Color black =
+		{ 0, 0, 0 };
+		Text text(renderer, Font("res/font/arial.ttf", 12), "Test sdl wrapper", black);
 
 		while (b_done == false)
 		{
@@ -88,30 +82,15 @@ int main(int argc, char** argv)
 
 			texture.copy(NULL, &dest);
 
-			static const SDL_Color black =
-			{ 0, 0, 0 };
-
-			SDL_Color foregroundColor =
-			{ 255, 255, 255 };
-			SDL_Color backgroundColor =
-			{ 0, 0, 0 };
-
-			char buf[256];
-			snprintf(buf, 256, "Testing SDL2_TTF");
-			Surface texte(TTF_RenderText_Shaded(font, buf, foregroundColor, backgroundColor));
-			Texture texture2(renderer, texte);
-			SDL_Rect position =
-			{ 100, 100, texture2.getWidth(), texture2.getHeight() };
-			texture2.copy(NULL, &position);
+			dest =
+			{	50,50,100,100};
+			text.copy(NULL, &dest);
 
 			renderer.present();
 
 			/// Update and Display current FrameRate
 			SDL_framerateDelay(&manager);
 		}
-
-		TTF_CloseFont(font);
-		TTF_Quit();
 
 		cout << "SDL2: Quit" << endl;
 		return 0;

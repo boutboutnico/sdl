@@ -31,6 +31,11 @@ enum class EInit
 	EVERYTHING = SDL_INIT_EVERYTHING,
 };
 
+enum class EInit_Lib
+{
+	SDL_TTF = 0
+};
+
 enum class EBlendMode
 {
 	NONE = SDL_BLENDMODE_NONE,
@@ -49,6 +54,7 @@ class SDL
 public:
 	/// === PUBLIC DECLARATIONS	====================================================================
 	SDL(EInit flags) throw (SDL_Exception);
+	SDL(EInit flags, EInit_Lib flags_lib) throw (SDL_Exception);
 	virtual ~SDL();
 
 	void quitSubSystem(EInit flags);

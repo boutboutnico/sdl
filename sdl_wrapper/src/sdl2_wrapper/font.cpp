@@ -1,38 +1,39 @@
-/*
- * surface.cpp
- *
- *  Created on: 12 juin 2014
- *      Author: Nico_user
- */
+///
+/// \file	font.cpp
+///	\brief	
+///	\date	15 août 2014
+/// \author	Nico_user
+///
 
-#include <surface.h>
+#include <font.h>
 using namespace sdl;
 
 /// === INCLUDES	================================================================================
 
 /// === NAMESPACES	================================================================================
-using namespace std;
 
 /// === PUBLIC DEFINITIONS	========================================================================
-Surface::Surface(const string& filename) throw (SDL_Exception)
+Font::Font(const std::string& filename, uint16_t size) throw (SDL_Exception) :
+		filename_(filename), size_(size)
 {
-	surface_ = SDL_LoadBMP(filename.c_str());
+	font_ = TTF_OpenFont(filename.c_str(), size);
 
-	if (surface_ == nullptr) throw SDL_Exception();
+	if (font_ == nullptr) throw SDL_Exception();
 }
 
 /// ------------------------------------------------------------------------------------------------
-Surface::Surface(SDL_Surface* surface) throw (SDL_Exception)
+Font::Font(const Font& font) throw (SDL_Exception) :
+		filename_(font.filename_), size_(font.size_)
 {
-	if (surface_ == nullptr) throw SDL_Exception();
+	font_ = TTF_OpenFont(font.filename_.c_str(), font.size_);
 
-	surface_ = surface;
+	if (font_ == nullptr) throw SDL_Exception();
 }
 
 /// ------------------------------------------------------------------------------------------------
-Surface::~Surface()
+Font::~Font()
 {
-	if (surface_ != nullptr) SDL_FreeSurface(surface_);
+	TTF_CloseFont(font_);
 }
 
 /// === PRIVATE DEFINITIONS	========================================================================
