@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 
 		if (TTF_Init() == -1)
 		{
-			cerr << "Erreur d'initialisation de TTF_Init : " << TTF_GetError() << endl;
+			cerr << "TTF_Init : " << TTF_GetError() << endl;
 		}
 
 		/// Création de la fenêtre
@@ -47,6 +47,11 @@ int main(int argc, char** argv)
 
 		/// Init font
 		TTF_Font* font = TTF_OpenFont("res/font/arial.ttf", 12);
+
+		if (font == nullptr)
+		{
+			cerr << "TTF_OpenFont : " << TTF_GetError() << endl;
+		}
 
 		while (b_done == false)
 		{
@@ -92,7 +97,7 @@ int main(int argc, char** argv)
 			{ 0, 0, 0 };
 
 			char buf[256];
-			snprintf(buf, 256, "TESTING");
+			snprintf(buf, 256, "Testing SDL2_TTF");
 			Surface texte(TTF_RenderText_Shaded(font, buf, foregroundColor, backgroundColor));
 			Texture texture2(renderer, texte);
 			SDL_Rect position =
